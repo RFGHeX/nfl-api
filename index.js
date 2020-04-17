@@ -1,19 +1,14 @@
 const express = require('express')
-const teams = require('./teams')
+const bodyParser = require('body-parser')
+const { getAllTeams, getTeamById, addNewTeam } = require('./controllers/teams')
 
 const app = express()
 
-app.get('/teams', (request, response) => {
-  return response.send(teams)
-})
+app.get('/teams', getAllTeams)
 
-app.get('/:teamId', (request, response) => {
-  const { teamId } = request.params
+app.get('/:teamId', getTeamById)
 
-  const findTeamId = teams.filter((team) => team.id === parseInt(teamId))
-
-  return response.send(findTeamId)
-})
+app.post('/', bodyParser.json(), addNewTeam)
 
 app.all('*', (request, response) => {
   return response.sendStatus(404)
